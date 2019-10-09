@@ -1,3 +1,6 @@
+# Test gitignore
+*.xyz
+
 # Prerequisites
 *.d
 
