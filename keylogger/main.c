@@ -235,11 +235,11 @@ int main() {
                     //printf("EVENT type %d (%s)\n", cookie->evtype, type_to_name(cookie->evtype));
                     //print_rawevent(cookie->data);
 
-                    //d_ev = (XIDeviceEvent*) ev.xcookie.data;
-                    //keycode = d_ev->detail;
-                    //keysym = XGetKeyboardMapping (display, keycode, 1, &keysyms_per_keycode);
-                    //result = XKeysymToString (keysym[0]);
-                    //printf("%d - %c\n", keysyms_per_keycode, *result);
+                    d_ev = (XIDeviceEvent*) ev.xcookie.data;
+                    keycode = d_ev->detail;
+                    keysym = XGetKeyboardMapping (display, keycode, 1, &keysyms_per_keycode);
+                    result = XKeysymToString (keysym[0]);
+                    printf("%d - %s\n", keysyms_per_keycode, result);
                     
                     //XLookupString((XKeyEvent *)&ev, lookupStr, 256, &ks, NULL);
                     //printf("%d\n", ks);

@@ -1,1 +1,1 @@
-gcc main.c -lX11 -lXi -lXrandr -o keylogger
+gcc main.c -lX11 -lXi -lXrandr -o keylogger.out
