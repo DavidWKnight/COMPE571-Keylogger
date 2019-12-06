@@ -2,6 +2,7 @@
 #include <linux/module.h>
 #include <linux/interrupt.h>
 #include <asm/io.h>
+#include <linux/time.h>
 
 #define KBD_IRQ             1       /* IRQ number for keyboard (i8042) */
 #define KBD_DATA_REG        0x60    /* I/O port for keyboard data */
@@ -11,24 +12,29 @@
 static irqreturn_t kbd2_isr(int irq, void *dev_id)
 {
     char scancode;
+	struct timespec ts;
 
     scancode = inb(KBD_DATA_REG);
     /* NOTE: i/o ops take a lot of time thus must be avoided in HW ISRs */
-    pr_info("Scan Code %x %s\n",
+	getnstimeofday(&ts);
+    printk(KERN_DEBUG "Scan Code %x %s, %d, %d\n",
             scancode & KBD_SCANCODE_MASK,
-            scancode & KBD_STATUS_MASK ? "Released" : "Pressed");
+            scancode & KBD_STATUS_MASK ? "Released" : "Pressed", 
+            ts.tv_sec, ts.tv_nsec); 
 
     return IRQ_HANDLED;
 }
 
 static int __init kbd2_init(void)
 {
+	printk("Loaded kbdirq module\n");
     return request_irq(KBD_IRQ, kbd2_isr, IRQF_SHARED, "kbd2", (void *)kbd2_isr);
 }
 
 static void __exit kbd2_exit(void)
 {
-    free_irq(KBD_IRQ, (void *)kbd2_isr);
+	printk("Unloaded kbdirq module\n");
+	free_irq(KBD_IRQ, (void *)kbd2_isr);
 }
 
 module_init(kbd2_init);
