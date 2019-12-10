@@ -1,7 +1,9 @@
 
 
-
-
+# Files unique to this project
+keylogger.txt
+module.txt
+results.txt
 
 # VS code
 .vscode/

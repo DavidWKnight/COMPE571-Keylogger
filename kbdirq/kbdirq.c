@@ -274,7 +274,7 @@ static irqreturn_t kbd2_isr(int irq, void *dev_id)
     scancode = scancode & KBD_SCANCODE_MASK;
 
     if (scancode <= 248 && scancode > 0) {
-        printk(KERN_DEBUG "%x", scancode);
+        //printk(KERN_DEBUG "%x", scancode);
         key = scancodeToKey[scancode];
     }
     

