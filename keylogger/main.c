@@ -4,6 +4,7 @@
 #include <X11/Xutil.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <sys/time.h>
 
 const char *detailToKey[] = {
     "", // 0
@@ -213,6 +214,9 @@ int main() {
     KeySym *keysym;
     char * result;
     char lookupStr[256];
+    //struct timespec ts;
+    struct timeval tv;
+
     while (1) {
         cookie = (XGenericEventCookie*)&ev.xcookie;
         XNextEvent(display, &ev);
@@ -239,7 +243,8 @@ int main() {
                     keycode = d_ev->detail;
                     keysym = XGetKeyboardMapping (display, keycode, 1, &keysyms_per_keycode);
                     result = XKeysymToString (keysym[0]);
-                    printf("%d - %s\n", keysyms_per_keycode, result);
+                    gettimeofday(&tv, NULL);
+                    printf("%s, %d, %d\n", result, tv.tv_sec, tv.tv_usec);
                     
                     //XLookupString((XKeyEvent *)&ev, lookupStr, 256, &ks, NULL);
                     //printf("%d\n", ks);
