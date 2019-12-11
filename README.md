@@ -1,10 +1,10 @@
 # COMPE571-Keylogger
 
 ## Requirements
-The X11 based keylogger requires the installation of the following packages:
-libx11-dev
-libxrandr-dev
-libxi-dev
+The X11 based keylogger requires the X11 and xrandr dev libraries, they can be installed by running:
+```
+sudo apt-get install libx11-dev libxrandr-dev libxi-dev
+```
 
 The kernel module based keylogger requires installation of kernel headers build libraries. You can install them by running:
 ```
